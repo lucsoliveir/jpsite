@@ -921,6 +921,112 @@
   .foot-ig svg{ width:16px; height:16px; }
 
   .results-more{ display:flex; justify-content:center; margin-top:44px; }
+
+  /* ---------- hero: nova foto + transições suaves ---------- */
+  .hero-bg img{ object-position:50% 24%; filter:brightness(.74) contrast(1.08) saturate(.92); }
+  @media (min-width:941px){
+    .hero-bg img{ object-position:50% 22%; }
+    .hero-bg::after{
+      background:
+        linear-gradient(90deg, #08080a 0%, #08080a 4%, rgba(8,8,10,0.9) 14%, rgba(8,8,10,0.5) 32%, rgba(8,8,10,0.12) 50%, rgba(8,8,10,0) 62%),
+        linear-gradient(180deg, #08080a 0%, rgba(8,8,10,0) 16%, rgba(8,8,10,0) 62%, rgba(8,8,10,0.85) 88%, #08080a 100%),
+        radial-gradient(120% 90% at 62% 40%, rgba(8,8,10,0) 40%, rgba(8,8,10,0.55) 100%);
+    }
+  }
+  @media (max-width:940px){
+    .hero-bg img{ object-position:50% 20%; }
+    .hero-bg::after{
+      background:
+        linear-gradient(180deg, #08080a 0%, rgba(8,8,10,0) 14%, rgba(8,8,10,0) 50%, rgba(8,8,10,0.9) 86%, #08080a 100%);
+    }
+  }
+
+  /* entrada: a foto "revela" devagar e o texto sobe em sequência */
+  @keyframes heroPhotoIn{
+    from{ opacity:0; transform:scale(1.08); filter:brightness(.35) contrast(1.08) blur(10px); }
+    to  { opacity:1; transform:scale(1);    filter:brightness(.74) contrast(1.08) saturate(.92) blur(0); }
+  }
+  @keyframes heroUp{
+    from{ opacity:0; transform:translate3d(0,22px,0); }
+    to  { opacity:1; transform:translate3d(0,0,0); }
+  }
+  .hero-bg img{ animation:heroPhotoIn 2s cubic-bezier(.22,.7,.2,1) both; will-change:transform,opacity,filter; }
+  .hero-solo > *{ animation:heroUp 1s cubic-bezier(.22,.7,.2,1) both; }
+  .hero-solo > *:nth-child(1){ animation-delay:.25s; }
+  .hero-solo > *:nth-child(2){ animation-delay:.4s; }
+  .hero-solo > *:nth-child(3){ animation-delay:.55s; }
+  .hero-solo > *:nth-child(4){ animation-delay:.7s; }
+  .hero-solo > *:nth-child(5){ animation-delay:.85s; }
+
+  /* saída: ao rolar, a foto sobe devagar e o texto esmaece, sem corte seco */
+  .hero-bg{ transform:translate3d(0,calc(var(--hp,0) * 46px),0); opacity:calc(1 - var(--hp,0) * .6); will-change:transform,opacity; }
+  .hero-content{ transform:translate3d(0,calc(var(--hp,0) * -30px),0); opacity:calc(1 - var(--hp,0) * 1.25); will-change:transform,opacity; }
+  .hero{ border-bottom:0; }
+  @media (prefers-reduced-motion:reduce){
+    .hero-bg img, .hero-solo > *{ animation:none; }
+    .hero-bg, .hero-content{ transform:none; opacity:1; }
+  }
+
+  /* sem linha seca entre o hero e a próxima seção: a foto se dissolve no fundo */
+  .hero + .statement{ border-top:0; }
+
+  /* ---------- hero mobile: altura da foto pela LARGURA da tela (não pela altura), sem linha no fim ---------- */
+  @media (max-width:940px){
+    .hero-bg{ height:clamp(300px,92vw,460px); overflow:hidden; }
+    .hero-bg img{
+      object-position:50% 16%;
+      -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 62%,rgba(0,0,0,0) 100%);
+              mask-image:linear-gradient(180deg,#000 0%,#000 62%,rgba(0,0,0,0) 100%);
+    }
+    .hero-bg::after{
+      inset:-2px 0 -2px 0;
+      background:
+        linear-gradient(180deg, #08080a 0%, rgba(8,8,10,0) 8%, rgba(8,8,10,0) 55%, rgba(8,8,10,0.85) 88%, #08080a 100%);
+    }
+    .hero-content{ padding-top:calc(64px + clamp(300px,92vw,460px) - 30px); }
+  }
+
+  /* ---------- celular: foto ATRÁS do texto (texto sobreposto à parte de baixo da foto) ---------- */
+  @media (max-width:700px){
+    .hero-bg{ height:clamp(430px,132vw,660px); }
+    .hero-bg img{
+      object-position:50% 8%;
+      -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 72%,rgba(0,0,0,0) 100%);
+              mask-image:linear-gradient(180deg,#000 0%,#000 72%,rgba(0,0,0,0) 100%);
+    }
+    .hero-bg::after{
+      background:
+        linear-gradient(180deg, #08080a 0%, rgba(8,8,10,0) 8%, rgba(8,8,10,0) 34%, rgba(8,8,10,0.5) 50%, rgba(8,8,10,0.84) 68%, rgba(8,8,10,0.95) 84%, #08080a 100%);
+    }
+    .hero-content{ padding-top:calc(64px + min(66vw,380px)); }
+    .hero h1, .hero p.lede, .hero-eyebrow-line{ text-shadow:0 2px 18px rgba(8,8,10,0.85); }
+    .hero p.lede{ color:rgba(242,241,236,0.82); }
+  }
+
+  /* ---------- celular: texto desde o topo, foto atrás (ele à direita, texto à esquerda) ---------- */
+  @media (max-width:700px){
+    .hero{ align-items:flex-start; padding:0 0 100px; }
+    .hero-bg{ inset:64px 0 auto 0; height:clamp(520px,160vw,780px); overflow:hidden; }
+    .hero-bg img{
+      position:absolute; top:0; left:17%;
+      width:132%; max-width:none; height:100%;
+      object-fit:cover; object-position:34% 2%;
+      -webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,0) 0%,#000 34%), linear-gradient(180deg,#000 0%,#000 72%,rgba(0,0,0,0) 100%);
+      -webkit-mask-composite:source-in;
+              mask-image:linear-gradient(90deg,rgba(0,0,0,0) 0%,#000 34%), linear-gradient(180deg,#000 0%,#000 72%,rgba(0,0,0,0) 100%);
+              mask-composite:intersect;
+    }
+    .hero-bg::after{
+      inset:-2px 0 -2px 0;
+      background:
+        linear-gradient(90deg, rgba(8,8,10,0.9) 0%, rgba(8,8,10,0.6) 24%, rgba(8,8,10,0.18) 46%, rgba(8,8,10,0) 62%),
+        linear-gradient(180deg, #08080a 0%, rgba(8,8,10,0) 8%, rgba(8,8,10,0) 36%, rgba(8,8,10,0.6) 56%, rgba(8,8,10,0.9) 78%, #08080a 100%);
+    }
+    .hero-content{ padding-top:calc(64px + 26px); }
+    .hero-solo{ display:flex; flex-direction:column; min-height:calc(100svh - 64px - 26px - 100px); }
+    .hero-meta{ margin-top:auto; }
+    .hero h1{ max-width:9.5ch; }
+  }
 </style>
 </head>
 <body>
@@ -959,7 +1065,7 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-bg">
-      <img src="images/hero-foto.jpg" alt="João Pedro, treinador responsável pelo método">
+      <img src="images/hero-joao.jpg" alt="João Pedro, treinador responsável pelo método" fetchpriority="high">
     </div>
     <div class="wrap hero-content">
       <div class="hero-solo">
@@ -1324,5 +1430,23 @@
   }
 </script>
 
+
+<script>
+  /* progresso de rolagem do hero (0 = topo, 1 = saiu da tela) -> variável CSS --hp */
+  (function(){
+    var hero=document.querySelector('.hero');
+    if(!hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var ticking=false;
+    function update(){
+      var r=hero.getBoundingClientRect();
+      var p=Math.min(1,Math.max(0,-r.top/(r.height*0.85)));
+      hero.style.setProperty('--hp',p.toFixed(3));
+      ticking=false;
+    }
+    window.addEventListener('scroll',function(){ if(!ticking){ ticking=true; requestAnimationFrame(update);} },{passive:true});
+    window.addEventListener('resize',update);
+    update();
+  })();
+</script>
 </body>
 </html>
