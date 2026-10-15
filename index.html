@@ -1071,6 +1071,34 @@
         linear-gradient(180deg, rgba(8,8,10,0) 0%, rgba(8,8,10,0) 34%, rgba(8,8,10,0.6) 56%, rgba(8,8,10,0.9) 100%);
     }
   }
+
+  /* ---------- fotos trocadas: hero = foto de frente (braços cruzados) | Método = foto olhando para baixo ---------- */
+  .photo-layer img{ object-position:50% 16%; }
+
+  /* seção "Mais do que um treino": no celular vira UMA coluna (a regra anterior era sobrescrita) */
+  @media (max-width:940px){
+    .statement-grid{ grid-template-columns:1fr; gap:36px; }
+    .statement-grid .hero-visual{ order:0; margin:0; }
+    .statement p{ max-width:none; }
+  }
+
+  /* desktop: a cabeça agora fica perto do topo da foto, então o painel desce um pouco */
+  @media (min-width:941px){
+    .hero-bg{ top:92px; inset:92px 0 0 36%; }
+    .hero-bg img{ object-position:50% 0%; }
+  }
+  @media (max-width:700px){
+    .hero-bg img{ object-position:50% 0%; }
+    .hero-content{ --pt:max(90px, min(calc(64px + 36vw - 190px), calc(64px + 34svh))); }
+  }
+
+  /* celular: com a foto de frente, o rosto fica à direita e o texto na coluna da esquerda */
+  @media (max-width:700px){
+    .hero-bg img{ width:158%; object-position:50% 0%; }
+    .hero-content{ --pt:max(90px, min(calc(64px + 38vw - 250px), calc(64px + 34svh))); }
+    .hero-solo{ max-width:58vw; }
+    .hero-meta{ margin-right:-42vw; }
+  }
 </style>
 </head>
 <body>
@@ -1109,7 +1137,7 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-bg">
-      <img src="images/hero-joao.jpg" alt="João Pedro, treinador responsável pelo método" fetchpriority="high">
+      <img src="images/hero-principal.jpg" alt="João Pedro, treinador responsável pelo método" fetchpriority="high">
     </div>
     <div class="wrap hero-content">
       <div class="hero-solo">
@@ -1143,7 +1171,7 @@
         </svg>
         <img class="mark" src="images/emblema-jp.png" alt="Emblema JP">
         <div class="photo-layer">
-          <img src="images/metodo-foto-joao.jpg" alt="João Pedro, treinador responsável pelo método">
+          <img src="images/metodo-joao.jpg" alt="João Pedro, treinador responsável pelo método">
         </div>
         <div class="corner-tag">
           <span>MÉTODO INDIVIDUAL</span>
